@@ -1,0 +1,221 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { getDb } from '../../../lib/db';
+import { getCategoryLabel, getCoverageLabel } from '../../../lib/utils';
+
+// Check if user is admin
+if (!Astro.locals.user || Astro.locals.user.role !== 'admin') {
+  return Astro.redirect('/');
+}
+
+const db = getDb(Astro.locals);
+
+// Get pending jobs
+const pendingJobs = await db.prepare(`
+  SELECT 
+    job_listings.*,
+    companies.name as company_name
+  FROM job_listings
+  LEFT JOIN companies ON job_listings.company_id = companies.id
+  WHERE job_listings.status = 'pending'
+  ORDER BY job_listings.created_at DESC
+`).all();
+---
+
+<BaseLayout title="Pending Jobs | Admin | RemoteJobs.com.my">
+  <div class="container">
+    <div class="admin-page">
+      <div class="page-header">
+        <h1>Pending Jobs</h1>
+        <a href="/admin" class="btn btn-secondary">← Back to Dashboard</a>
+      </div>
+
+      {pendingJobs.results.length === 0 ? (
+        <div class="card">
+          <p class="text-muted">No pending jobs to review.</p>
+        </div>
+      ) : (
+        <div class="jobs-list">
+          {pendingJobs.results.map((job: any) => (
+            <div class="job-item card">
+              <div class="job-header">
+                <h3>{job.job_title}</h3>
+                <p class="company-name">{job.company_name || 'Unknown Company'}</p>
+              </div>
+
+              <div class="job-meta">
+                <span class="badge badge-primary">{getCategoryLabel(job.category)}</span>
+                <span class="badge badge-secondary">{getCoverageLabel(job.coverage)}</span>
+                <span class="text-muted text-small">
+                  Posted: {new Date(job.listing_date || job.created_at).toLocaleDateString()}
+                </span>
+              </div>
+
+              <div class="job-details">
+                <p><strong>Platform:</strong> {job.platform}</p>
+                <p><strong>Source:</strong> 
+                  <a href={job.listing_url} target="_blank" rel="noopener noreferrer">
+                    View Original
+                  </a>
+                </p>
+              </div>
+
+              <div class="job-actions">
+                <button 
+                  class="btn btn-success"
+                  data-job-id={job.id}
+                  onclick="approveJob(this.dataset.jobId)"
+                >
+                  Approve
+                </button>
+                <button 
+                  class="btn btn-danger"
+                  data-job-id={job.id}
+                  onclick="rejectJob(this.dataset.jobId)"
+                >
+                  Reject
+                </button>
+                <a 
+                  href={`/admin/jobs/${job.id}/edit`}
+                  class="btn btn-secondary"
+                >
+                  Edit
+                </a>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .admin-page {
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+
+  .page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-xl);
+  }
+
+  .jobs-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-lg);
+  }
+
+  .job-item {
+    position: relative;
+  }
+
+  .job-header {
+    margin-bottom: var(--spacing-md);
+  }
+
+  .job-header h3 {
+    margin-bottom: var(--spacing-xs);
+    color: var(--color-text);
+  }
+
+  .company-name {
+    color: var(--color-text-muted);
+    margin: 0;
+  }
+
+  .job-meta {
+    display: flex;
+    gap: var(--spacing-sm);
+    align-items: center;
+    flex-wrap: wrap;
+    margin-bottom: var(--spacing-md);
+  }
+
+  .job-details {
+    margin-bottom: var(--spacing-lg);
+  }
+
+  .job-details p {
+    margin-bottom: var(--spacing-xs);
+  }
+
+  .job-actions {
+    display: flex;
+    gap: var(--spacing-sm);
+    flex-wrap: wrap;
+  }
+
+  @media (max-width: 640px) {
+    .page-header {
+      flex-direction: column;
+      gap: var(--spacing-md);
+      align-items: stretch;
+    }
+
+    .job-actions {
+      flex-direction: column;
+    }
+
+    .job-actions button,
+    .job-actions a {
+      width: 100%;
+      text-align: center;
+    }
+  }
+</style>
+
+<script>
+  async function approveJob(jobId: string) {
+    if (!confirm('Are you sure you want to approve this job?')) return;
+    
+    try {
+      const response = await fetch('/api/admin/jobs/approve', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ job_id: parseInt(jobId) }),
+      });
+      
+      if (response.ok) {
+        location.reload();
+      } else {
+        const data = await response.json();
+        alert('Error: ' + (data.error || 'Something went wrong'));
+      }
+    } catch (error) {
+      alert('Network error. Please try again.');
+    }
+  }
+
+  async function rejectJob(jobId: string) {
+    if (!confirm('Are you sure you want to reject this job?')) return;
+    
+    try {
+      const response = await fetch('/api/admin/jobs/reject', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ job_id: parseInt(jobId) }),
+      });
+      
+      if (response.ok) {
+        location.reload();
+      } else {
+        const data = await response.json();
+        alert('Error: ' + (data.error || 'Something went wrong'));
+      }
+    } catch (error) {
+      alert('Network error. Please try again.');
+    }
+  }
+
+  // Make functions globally available
+  (window as any).approveJob = approveJob;
+  (window as any).rejectJob = rejectJob;
+</script>

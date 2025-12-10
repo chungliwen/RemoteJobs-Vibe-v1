@@ -1,0 +1,122 @@
+---
+interface Props {
+  job: any;
+  company?: any;
+}
+
+const { job, company } = Astro.props;
+
+function formatDate(date: string | null): string {
+  if (!date) return 'N/A';
+  const d = new Date(date);
+  return d.toLocaleDateString('en-MY', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric'
+  });
+}
+
+function getCategoryLabel(slug: string | null): string {
+  if (!slug) return 'Uncategorized';
+  const categories = {
+    'tech-development': 'Tech/Development',
+    'design-creative': 'Design/Creative',
+    'writing-content': 'Writing/Content',
+    'admin-virtual-assistant': 'Admin/Virtual Assistant',
+    'marketing-social-media': 'Marketing/Social Media',
+    'customer-support': 'Customer Support',
+    'other': 'Other'
+  };
+  return categories[slug as keyof typeof categories] || 'Other';
+}
+
+function getCoverageLabel(slug: string): string {
+  const coverage = {
+    'malaysia': 'Malaysia',
+    'asia': 'Asia',
+    'worldwide': 'Worldwide',
+    'other': 'Other'
+  };
+  return coverage[slug as keyof typeof coverage] || 'Other';
+}
+---
+
+<article class="job-card">
+  <div class="job-header">
+    <h3 class="job-title">
+      <a href={`/jobs/${job.id}`}>{job.job_title}</a>
+    </h3>
+    <p class="company-name text-muted">{company?.name || 'Unknown Company'}</p>
+  </div>
+
+  <div class="job-meta">
+    {job.category && (
+      <span class="badge badge-primary">{getCategoryLabel(job.category)}</span>
+    )}
+    <span class="badge badge-secondary">{getCoverageLabel(job.coverage)}</span>
+    <span class="text-muted text-small">{formatDate(job.listing_date)}</span>
+  </div>
+
+  <div class="job-actions">
+    <a href={`/jobs/${job.id}`} class="btn btn-primary btn-sm">View Details</a>
+    <a href={job.listing_url} target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-sm">
+      Apply →
+    </a>
+  </div>
+</article>
+
+<style>
+  .job-card {
+    background-color: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-lg);
+    box-shadow: var(--shadow-sm);
+    transition: box-shadow 0.2s, transform 0.2s;
+  }
+
+  .job-card:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+  }
+
+  .job-header {
+    margin-bottom: var(--spacing-md);
+  }
+
+  .job-title {
+    font-size: 1.25rem;
+    margin-bottom: var(--spacing-xs);
+  }
+
+  .job-title a {
+    color: var(--color-text);
+  }
+
+  .job-title a:hover {
+    color: var(--color-primary);
+    text-decoration: none;
+  }
+
+  .company-name {
+    font-size: 1rem;
+  }
+
+  .job-meta {
+    display: flex;
+    gap: var(--spacing-sm);
+    align-items: center;
+    flex-wrap: wrap;
+    margin-bottom: var(--spacing-md);
+  }
+
+  .job-actions {
+    display: flex;
+    gap: var(--spacing-sm);
+  }
+
+  .btn-sm {
+    padding: var(--spacing-xs) var(--spacing-md);
+    font-size: 0.875rem;
+  }
+</style>

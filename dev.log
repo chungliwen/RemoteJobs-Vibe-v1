@@ -1,0 +1,354 @@
+
+> remotejobs-my@0.0.1 dev
+> astro dev
+
+21:22:15 [@astrojs/cloudflare] Enabling sessions with Cloudflare KV with the "SESSION" KV binding.
+21:22:15 [@astrojs/cloudflare] If you see the error "Invalid binding `SESSION`" in your build output, you need to add the binding to your wrangler config file.
+21:22:15 [WARN] [adapter] Cloudflare does not support sharp at runtime. However, you can configure `imageService: "compile"` to optimize images with sharp on prerendered pages during build time.
+21:22:16 [types] Generated 0ms
+21:22:16 [content] Syncing content
+21:22:16 [content] Synced content
+
+ astro  v5.16.4 ready in 943 ms
+
+┃ Local    http://localhost:4321/
+┃ Network  use --host to expose
+
+21:22:16 watching for file changes...
+21:22:17 [ERROR] Expected ">" but found "title"
+  Stack trace:
+    at /Users/matt/programming/astro/job-board/src/pages/index.astro:49:12
+    [...] See full stack trace in the browser, or rerun with --verbose.
+21:22:24 [ERROR] Expected ">" but found "title"
+  Stack trace:
+    at failureErrorWithLog (/Users/matt/programming/astro/job-board/node_modules/esbuild/lib/main.js:1467:15)
+    [...] See full stack trace in the browser, or rerun with --verbose.
+21:22:31 [ERROR] Expected ">" but found "title"
+  Stack trace:
+    at failureErrorWithLog (/Users/matt/programming/astro/job-board/node_modules/esbuild/lib/main.js:1467:15)
+    [...] See full stack trace in the browser, or rerun with --verbose.
+21:22:41 [200] /jobs/1 714ms
+21:23:17 [ERROR] Expected ">" but found "title"
+  Stack trace:
+    at failureErrorWithLog (/Users/matt/programming/astro/job-board/node_modules/esbuild/lib/main.js:1467:15)
+    [...] See full stack trace in the browser, or rerun with --verbose.
+21:25:45 [ERROR] Expected ">" but found "title"
+  Stack trace:
+    at failureErrorWithLog (/Users/matt/programming/astro/job-board/node_modules/esbuild/lib/main.js:1467:15)
+    [...] See full stack trace in the browser, or rerun with --verbose.
+21:25:45 [ERROR] Expected ">" but found "title"
+  Stack trace:
+    at failureErrorWithLog (/Users/matt/programming/astro/job-board/node_modules/esbuild/lib/main.js:1467:15)
+    [...] See full stack trace in the browser, or rerun with --verbose.
+21:25:45 [ERROR] Expected ">" but found "title"
+  Stack trace:
+    at failureErrorWithLog (/Users/matt/programming/astro/job-board/node_modules/esbuild/lib/main.js:1467:15)
+    [...] See full stack trace in the browser, or rerun with --verbose.
+21:25:45 [ERROR] Expected ">" but found "title"
+  Stack trace:
+    at failureErrorWithLog (/Users/matt/programming/astro/job-board/node_modules/esbuild/lib/main.js:1467:15)
+    [...] See full stack trace in the browser, or rerun with --verbose.
+21:25:46 [ERROR] Expected ">" but found "title"
+  Stack trace:
+    at failureErrorWithLog (/Users/matt/programming/astro/job-board/node_modules/esbuild/lib/main.js:1467:15)
+    [...] See full stack trace in the browser, or rerun with --verbose.
+21:25:47 [ERROR] Expected ">" but found "title"
+  Stack trace:
+    at failureErrorWithLog (/Users/matt/programming/astro/job-board/node_modules/esbuild/lib/main.js:1467:15)
+    [...] See full stack trace in the browser, or rerun with --verbose.
+21:25:47 [ERROR] Expected ">" but found "title"
+  Stack trace:
+    at failureErrorWithLog (/Users/matt/programming/astro/job-board/node_modules/esbuild/lib/main.js:1467:15)
+    [...] See full stack trace in the browser, or rerun with --verbose.
+21:25:48 [ERROR] Expected ">" but found "title"
+  Stack trace:
+    at failureErrorWithLog (/Users/matt/programming/astro/job-board/node_modules/esbuild/lib/main.js:1467:15)
+    [...] See full stack trace in the browser, or rerun with --verbose.
+21:25:49 [ERROR] Expected ">" but found "title"
+  Stack trace:
+    at failureErrorWithLog (/Users/matt/programming/astro/job-board/node_modules/esbuild/lib/main.js:1467:15)
+    [...] See full stack trace in the browser, or rerun with --verbose.
+21:25:50 [ERROR] Expected ">" but found "title"
+  Stack trace:
+    at failureErrorWithLog (/Users/matt/programming/astro/job-board/node_modules/esbuild/lib/main.js:1467:15)
+    [...] See full stack trace in the browser, or rerun with --verbose.
+21:25:51 [ERROR] Expected ">" but found "title"
+  Stack trace:
+    at failureErrorWithLog (/Users/matt/programming/astro/job-board/node_modules/esbuild/lib/main.js:1467:15)
+    [...] See full stack trace in the browser, or rerun with --verbose.
+21:25:52 [ERROR] Expected ">" but found "title"
+  Stack trace:
+    at failureErrorWithLog (/Users/matt/programming/astro/job-board/node_modules/esbuild/lib/main.js:1467:15)
+    [...] See full stack trace in the browser, or rerun with --verbose.
+21:25:53 [ERROR] Expected ">" but found "title"
+  Stack trace:
+    at failureErrorWithLog (/Users/matt/programming/astro/job-board/node_modules/esbuild/lib/main.js:1467:15)
+    [...] See full stack trace in the browser, or rerun with --verbose.
+21:25:54 [ERROR] Expected ">" but found "title"
+  Stack trace:
+    at failureErrorWithLog (/Users/matt/programming/astro/job-board/node_modules/esbuild/lib/main.js:1467:15)
+    [...] See full stack trace in the browser, or rerun with --verbose.
+21:25:55 [ERROR] Expected ">" but found "title"
+  Stack trace:
+    at failureErrorWithLog (/Users/matt/programming/astro/job-board/node_modules/esbuild/lib/main.js:1467:15)
+    [...] See full stack trace in the browser, or rerun with --verbose.
+21:25:56 [ERROR] Expected ">" but found "title"
+  Stack trace:
+    at failureErrorWithLog (/Users/matt/programming/astro/job-board/node_modules/esbuild/lib/main.js:1467:15)
+    [...] See full stack trace in the browser, or rerun with --verbose.
+21:25:57 [ERROR] Expected ">" but found "title"
+  Stack trace:
+    at failureErrorWithLog (/Users/matt/programming/astro/job-board/node_modules/esbuild/lib/main.js:1467:15)
+    [...] See full stack trace in the browser, or rerun with --verbose.
+21:25:58 [ERROR] Expected ">" but found "title"
+  Stack trace:
+    at failureErrorWithLog (/Users/matt/programming/astro/job-board/node_modules/esbuild/lib/main.js:1467:15)
+    [...] See full stack trace in the browser, or rerun with --verbose.
+21:25:59 [ERROR] Expected ">" but found "title"
+  Stack trace:
+    at failureErrorWithLog (/Users/matt/programming/astro/job-board/node_modules/esbuild/lib/main.js:1467:15)
+    [...] See full stack trace in the browser, or rerun with --verbose.
+21:26:00 [ERROR] Expected ">" but found "title"
+  Stack trace:
+    at failureErrorWithLog (/Users/matt/programming/astro/job-board/node_modules/esbuild/lib/main.js:1467:15)
+    [...] See full stack trace in the browser, or rerun with --verbose.
+21:26:01 [ERROR] Expected ">" but found "title"
+  Stack trace:
+    at failureErrorWithLog (/Users/matt/programming/astro/job-board/node_modules/esbuild/lib/main.js:1467:15)
+    [...] See full stack trace in the browser, or rerun with --verbose.
+21:26:02 [ERROR] Expected ">" but found "title"
+  Stack trace:
+    at failureErrorWithLog (/Users/matt/programming/astro/job-board/node_modules/esbuild/lib/main.js:1467:15)
+    [...] See full stack trace in the browser, or rerun with --verbose.
+21:26:03 [ERROR] Expected ">" but found "title"
+  Stack trace:
+    at failureErrorWithLog (/Users/matt/programming/astro/job-board/node_modules/esbuild/lib/main.js:1467:15)
+    [...] See full stack trace in the browser, or rerun with --verbose.
+21:26:04 [ERROR] Expected ">" but found "title"
+  Stack trace:
+    at failureErrorWithLog (/Users/matt/programming/astro/job-board/node_modules/esbuild/lib/main.js:1467:15)
+    [...] See full stack trace in the browser, or rerun with --verbose.
+21:26:05 [ERROR] Expected ">" but found "title"
+  Stack trace:
+    at failureErrorWithLog (/Users/matt/programming/astro/job-board/node_modules/esbuild/lib/main.js:1467:15)
+    [...] See full stack trace in the browser, or rerun with --verbose.
+21:26:06 [ERROR] Expected ">" but found "title"
+  Stack trace:
+    at failureErrorWithLog (/Users/matt/programming/astro/job-board/node_modules/esbuild/lib/main.js:1467:15)
+    [...] See full stack trace in the browser, or rerun with --verbose.
+21:26:07 [ERROR] Expected ">" but found "title"
+  Stack trace:
+    at failureErrorWithLog (/Users/matt/programming/astro/job-board/node_modules/esbuild/lib/main.js:1467:15)
+    [...] See full stack trace in the browser, or rerun with --verbose.
+21:26:08 [ERROR] Expected ">" but found "title"
+  Stack trace:
+    at failureErrorWithLog (/Users/matt/programming/astro/job-board/node_modules/esbuild/lib/main.js:1467:15)
+    [...] See full stack trace in the browser, or rerun with --verbose.
+21:26:09 [ERROR] Expected ">" but found "title"
+  Stack trace:
+    at failureErrorWithLog (/Users/matt/programming/astro/job-board/node_modules/esbuild/lib/main.js:1467:15)
+    [...] See full stack trace in the browser, or rerun with --verbose.
+21:26:10 [ERROR] Expected ">" but found "title"
+  Stack trace:
+    at failureErrorWithLog (/Users/matt/programming/astro/job-board/node_modules/esbuild/lib/main.js:1467:15)
+    [...] See full stack trace in the browser, or rerun with --verbose.
+21:26:11 [ERROR] Expected ">" but found "title"
+  Stack trace:
+    at failureErrorWithLog (/Users/matt/programming/astro/job-board/node_modules/esbuild/lib/main.js:1467:15)
+    [...] See full stack trace in the browser, or rerun with --verbose.
+21:26:12 [ERROR] Expected ">" but found "title"
+  Stack trace:
+    at failureErrorWithLog (/Users/matt/programming/astro/job-board/node_modules/esbuild/lib/main.js:1467:15)
+    [...] See full stack trace in the browser, or rerun with --verbose.
+21:26:13 [ERROR] Expected ">" but found "title"
+  Stack trace:
+    at failureErrorWithLog (/Users/matt/programming/astro/job-board/node_modules/esbuild/lib/main.js:1467:15)
+    [...] See full stack trace in the browser, or rerun with --verbose.
+21:26:14 [ERROR] Expected ">" but found "title"
+  Stack trace:
+    at failureErrorWithLog (/Users/matt/programming/astro/job-board/node_modules/esbuild/lib/main.js:1467:15)
+    [...] See full stack trace in the browser, or rerun with --verbose.
+21:26:15 [ERROR] Expected ">" but found "title"
+  Stack trace:
+    at failureErrorWithLog (/Users/matt/programming/astro/job-board/node_modules/esbuild/lib/main.js:1467:15)
+    [...] See full stack trace in the browser, or rerun with --verbose.
+21:26:16 [ERROR] Expected ">" but found "title"
+  Stack trace:
+    at failureErrorWithLog (/Users/matt/programming/astro/job-board/node_modules/esbuild/lib/main.js:1467:15)
+    [...] See full stack trace in the browser, or rerun with --verbose.
+21:26:17 [ERROR] Expected ">" but found "title"
+  Stack trace:
+    at failureErrorWithLog (/Users/matt/programming/astro/job-board/node_modules/esbuild/lib/main.js:1467:15)
+    [...] See full stack trace in the browser, or rerun with --verbose.
+21:26:18 [ERROR] Expected ">" but found "title"
+  Stack trace:
+    at failureErrorWithLog (/Users/matt/programming/astro/job-board/node_modules/esbuild/lib/main.js:1467:15)
+    [...] See full stack trace in the browser, or rerun with --verbose.
+21:26:19 [ERROR] Expected ">" but found "title"
+  Stack trace:
+    at failureErrorWithLog (/Users/matt/programming/astro/job-board/node_modules/esbuild/lib/main.js:1467:15)
+    [...] See full stack trace in the browser, or rerun with --verbose.
+21:26:20 [ERROR] Expected ">" but found "title"
+  Stack trace:
+    at failureErrorWithLog (/Users/matt/programming/astro/job-board/node_modules/esbuild/lib/main.js:1467:15)
+    [...] See full stack trace in the browser, or rerun with --verbose.
+21:26:21 [ERROR] Expected ">" but found "title"
+  Stack trace:
+    at failureErrorWithLog (/Users/matt/programming/astro/job-board/node_modules/esbuild/lib/main.js:1467:15)
+    [...] See full stack trace in the browser, or rerun with --verbose.
+21:26:22 [ERROR] Expected ">" but found "title"
+  Stack trace:
+    at failureErrorWithLog (/Users/matt/programming/astro/job-board/node_modules/esbuild/lib/main.js:1467:15)
+    [...] See full stack trace in the browser, or rerun with --verbose.
+21:26:23 [ERROR] Expected ">" but found "title"
+  Stack trace:
+    at failureErrorWithLog (/Users/matt/programming/astro/job-board/node_modules/esbuild/lib/main.js:1467:15)
+    [...] See full stack trace in the browser, or rerun with --verbose.
+21:26:24 [ERROR] Expected ">" but found "title"
+  Stack trace:
+    at failureErrorWithLog (/Users/matt/programming/astro/job-board/node_modules/esbuild/lib/main.js:1467:15)
+    [...] See full stack trace in the browser, or rerun with --verbose.
+21:26:25 [ERROR] Expected ">" but found "title"
+  Stack trace:
+    at failureErrorWithLog (/Users/matt/programming/astro/job-board/node_modules/esbuild/lib/main.js:1467:15)
+    [...] See full stack trace in the browser, or rerun with --verbose.
+21:26:26 [ERROR] Expected ">" but found "title"
+  Stack trace:
+    at failureErrorWithLog (/Users/matt/programming/astro/job-board/node_modules/esbuild/lib/main.js:1467:15)
+    [...] See full stack trace in the browser, or rerun with --verbose.
+21:26:27 [ERROR] Expected ">" but found "title"
+  Stack trace:
+    at failureErrorWithLog (/Users/matt/programming/astro/job-board/node_modules/esbuild/lib/main.js:1467:15)
+    [...] See full stack trace in the browser, or rerun with --verbose.
+21:26:28 [ERROR] Expected ">" but found "title"
+  Stack trace:
+    at failureErrorWithLog (/Users/matt/programming/astro/job-board/node_modules/esbuild/lib/main.js:1467:15)
+    [...] See full stack trace in the browser, or rerun with --verbose.
+21:26:29 [ERROR] Expected ">" but found "title"
+  Stack trace:
+    at failureErrorWithLog (/Users/matt/programming/astro/job-board/node_modules/esbuild/lib/main.js:1467:15)
+    [...] See full stack trace in the browser, or rerun with --verbose.
+21:26:30 [ERROR] Expected ">" but found "title"
+  Stack trace:
+    at failureErrorWithLog (/Users/matt/programming/astro/job-board/node_modules/esbuild/lib/main.js:1467:15)
+    [...] See full stack trace in the browser, or rerun with --verbose.
+21:26:31 [ERROR] Expected ">" but found "title"
+  Stack trace:
+    at failureErrorWithLog (/Users/matt/programming/astro/job-board/node_modules/esbuild/lib/main.js:1467:15)
+    [...] See full stack trace in the browser, or rerun with --verbose.
+21:26:32 [ERROR] Expected ">" but found "title"
+  Stack trace:
+    at failureErrorWithLog (/Users/matt/programming/astro/job-board/node_modules/esbuild/lib/main.js:1467:15)
+    [...] See full stack trace in the browser, or rerun with --verbose.
+21:26:33 [ERROR] Expected ">" but found "title"
+  Stack trace:
+    at failureErrorWithLog (/Users/matt/programming/astro/job-board/node_modules/esbuild/lib/main.js:1467:15)
+    [...] See full stack trace in the browser, or rerun with --verbose.
+21:26:34 [ERROR] Expected ">" but found "title"
+  Stack trace:
+    at failureErrorWithLog (/Users/matt/programming/astro/job-board/node_modules/esbuild/lib/main.js:1467:15)
+    [...] See full stack trace in the browser, or rerun with --verbose.
+21:26:35 [ERROR] Expected ">" but found "title"
+  Stack trace:
+    at failureErrorWithLog (/Users/matt/programming/astro/job-board/node_modules/esbuild/lib/main.js:1467:15)
+    [...] See full stack trace in the browser, or rerun with --verbose.
+21:26:37 [ERROR] Expected ">" but found "title"
+  Stack trace:
+    at failureErrorWithLog (/Users/matt/programming/astro/job-board/node_modules/esbuild/lib/main.js:1467:15)
+    [...] See full stack trace in the browser, or rerun with --verbose.
+21:26:38 [ERROR] Expected ">" but found "title"
+  Stack trace:
+    at failureErrorWithLog (/Users/matt/programming/astro/job-board/node_modules/esbuild/lib/main.js:1467:15)
+    [...] See full stack trace in the browser, or rerun with --verbose.
+21:26:39 [ERROR] Expected ">" but found "title"
+  Stack trace:
+    at failureErrorWithLog (/Users/matt/programming/astro/job-board/node_modules/esbuild/lib/main.js:1467:15)
+    [...] See full stack trace in the browser, or rerun with --verbose.
+21:26:40 [ERROR] Expected ">" but found "title"
+  Stack trace:
+    at failureErrorWithLog (/Users/matt/programming/astro/job-board/node_modules/esbuild/lib/main.js:1467:15)
+    [...] See full stack trace in the browser, or rerun with --verbose.
+21:26:41 [ERROR] Expected ">" but found "title"
+  Stack trace:
+    at failureErrorWithLog (/Users/matt/programming/astro/job-board/node_modules/esbuild/lib/main.js:1467:15)
+    [...] See full stack trace in the browser, or rerun with --verbose.
+21:26:42 [ERROR] Expected ">" but found "title"
+  Stack trace:
+    at failureErrorWithLog (/Users/matt/programming/astro/job-board/node_modules/esbuild/lib/main.js:1467:15)
+    [...] See full stack trace in the browser, or rerun with --verbose.
+21:26:43 [ERROR] Expected ">" but found "title"
+  Stack trace:
+    at failureErrorWithLog (/Users/matt/programming/astro/job-board/node_modules/esbuild/lib/main.js:1467:15)
+    [...] See full stack trace in the browser, or rerun with --verbose.
+21:26:44 [ERROR] Expected ">" but found "title"
+  Stack trace:
+    at failureErrorWithLog (/Users/matt/programming/astro/job-board/node_modules/esbuild/lib/main.js:1467:15)
+    [...] See full stack trace in the browser, or rerun with --verbose.
+21:26:45 [ERROR] Expected ">" but found "title"
+  Stack trace:
+    at failureErrorWithLog (/Users/matt/programming/astro/job-board/node_modules/esbuild/lib/main.js:1467:15)
+    [...] See full stack trace in the browser, or rerun with --verbose.
+21:26:45 [watch] playwright-report/index.html
+21:26:45 [ERROR] Expected ">" but found "title"
+  Stack trace:
+    at failureErrorWithLog (/Users/matt/programming/astro/job-board/node_modules/esbuild/lib/main.js:1467:15)
+    [...] See full stack trace in the browser, or rerun with --verbose.
+21:27:02 [ERROR] Expected ">" but found "title"
+  Stack trace:
+    at failureErrorWithLog (/Users/matt/programming/astro/job-board/node_modules/esbuild/lib/main.js:1467:15)
+    [...] See full stack trace in the browser, or rerun with --verbose.
+21:27:07 [ERROR] Expected ">" but found "title"
+  Stack trace:
+    at failureErrorWithLog (/Users/matt/programming/astro/job-board/node_modules/esbuild/lib/main.js:1467:15)
+    [...] See full stack trace in the browser, or rerun with --verbose.
+21:27:20 [ERROR] Expected ">" but found "title"
+  Stack trace:
+    at failureErrorWithLog (/Users/matt/programming/astro/job-board/node_modules/esbuild/lib/main.js:1467:15)
+    [...] See full stack trace in the browser, or rerun with --verbose.
+21:27:37 [ERROR] Expected ">" but found "title"
+  Stack trace:
+    at failureErrorWithLog (/Users/matt/programming/astro/job-board/node_modules/esbuild/lib/main.js:1467:15)
+    [...] See full stack trace in the browser, or rerun with --verbose.
+21:27:49 [ERROR] Expected ">" but found "title"
+  Stack trace:
+    at failureErrorWithLog (/Users/matt/programming/astro/job-board/node_modules/esbuild/lib/main.js:1467:15)
+    [...] See full stack trace in the browser, or rerun with --verbose.
+21:27:56 [ERROR] Expected ">" but found "title"
+  Stack trace:
+    at failureErrorWithLog (/Users/matt/programming/astro/job-board/node_modules/esbuild/lib/main.js:1467:15)
+    [...] See full stack trace in the browser, or rerun with --verbose.
+21:28:10 [ERROR] Expected ">" but found "title"
+  Stack trace:
+    at failureErrorWithLog (/Users/matt/programming/astro/job-board/node_modules/esbuild/lib/main.js:1467:15)
+    [...] See full stack trace in the browser, or rerun with --verbose.
+21:28:49 [ERROR] Expected ">" but found "title"
+  Stack trace:
+    at failureErrorWithLog (/Users/matt/programming/astro/job-board/node_modules/esbuild/lib/main.js:1467:15)
+    [...] See full stack trace in the browser, or rerun with --verbose.
+21:29:07 [watch] playwright-report/index.html
+21:29:07 [ERROR] Expected ">" but found "title"
+  Stack trace:
+    at failureErrorWithLog (/Users/matt/programming/astro/job-board/node_modules/esbuild/lib/main.js:1467:15)
+    [...] See full stack trace in the browser, or rerun with --verbose.
+21:29:59 Configuration file updated. Restarting...
+21:30:00 [@astrojs/cloudflare] Enabling sessions with Cloudflare KV with the "SESSION" KV binding.
+21:30:00 [@astrojs/cloudflare] If you see the error "Invalid binding `SESSION`" in your build output, you need to add the binding to your wrangler config file.
+21:30:00 [WARN] [adapter] Cloudflare does not support sharp at runtime. However, you can configure `imageService: "compile"` to optimize images with sharp on prerendered pages during build time.
+21:30:01 [vite] Re-optimizing dependencies because lockfile has changed
+21:30:01 [content] Syncing content
+21:30:01 [content] Synced content
+21:30:01 [types] Generated 478ms
+21:30:01 [vite] Re-optimizing dependencies because vite config has changed
+21:30:01 [ERROR] Expected ">" but found "title"
+  Stack trace:
+    at failureErrorWithLog (/Users/matt/programming/astro/job-board/node_modules/esbuild/lib/main.js:1467:15)
+    [...] See full stack trace in the browser, or rerun with --verbose.
+21:30:02 [ERROR] Expected ">" but found "title"
+  Stack trace:
+    at failureErrorWithLog (/Users/matt/programming/astro/job-board/node_modules/esbuild/lib/main.js:1467:15)
+    [...] See full stack trace in the browser, or rerun with --verbose.
+21:31:13 [ERROR] Expected ">" but found "title"
+  Stack trace:
+    at failureErrorWithLog (/Users/matt/programming/astro/job-board/node_modules/esbuild/lib/main.js:1467:15)
+    [...] See full stack trace in the browser, or rerun with --verbose.
+21:33:14 [WARN] Unsupported file type /Users/matt/programming/astro/job-board/src/pages/index.astro.backup found. Prefix filename with an underscore (`_`) to ignore.

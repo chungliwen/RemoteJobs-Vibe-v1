@@ -1,0 +1,249 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getDb } from '../../lib/db';
+
+// Check if user is admin
+if (!Astro.locals.user || Astro.locals.user.role !== 'admin') {
+  return Astro.redirect('/');
+}
+
+const db = getDb(Astro.locals);
+
+// Get stats
+const totalJobs = await db.prepare('SELECT COUNT(*) as count FROM job_listings').first();
+const pendingJobs = await db.prepare('SELECT COUNT(*) as count FROM job_listings WHERE status = "pending"').first();
+const approvedJobs = await db.prepare('SELECT COUNT(*) as count FROM job_listings WHERE status = "approved"').first();
+const totalUsers = await db.prepare('SELECT COUNT(*) as count FROM users').first();
+const newsletterSubscribers = await db.prepare('SELECT COUNT(*) as count FROM users WHERE newsletter_opt_in = 1').first();
+
+// Get recent approved jobs
+const recentJobs = await db.prepare(`
+  SELECT 
+    job_listings.*,
+    companies.name as company_name
+  FROM job_listings
+  LEFT JOIN companies ON job_listings.company_id = companies.id
+  WHERE job_listings.status = 'approved'
+  ORDER BY job_listings.created_at DESC
+  LIMIT 5
+`).all();
+---
+
+<BaseLayout title="Admin Dashboard | RemoteJobs.com.my">
+  <div class="container">
+    <div class="admin-dashboard">
+      <h1>Admin Dashboard</h1>
+      
+      <section class="stats-grid">
+        <div class="stat-card">
+          <h3>Total Jobs</h3>
+          <p class="stat-number">{totalJobs?.count || 0}</p>
+        </div>
+        <div class="stat-card">
+          <h3>Pending Review</h3>
+          <p class="stat-number pending">{pendingJobs?.count || 0}</p>
+        </div>
+        <div class="stat-card">
+          <h3>Approved Jobs</h3>
+          <p class="stat-number approved">{approvedJobs?.count || 0}</p>
+        </div>
+        <div class="stat-card">
+          <h3>Total Users</h3>
+          <p class="stat-number">{totalUsers?.count || 0}</p>
+        </div>
+        <div class="stat-card">
+          <h3>Newsletter Subs</h3>
+          <p class="stat-number">{newsletterSubscribers?.count || 0}</p>
+        </div>
+      </section>
+
+      <section class="recent-jobs">
+        <div class="section-header">
+          <h2>Recent Approved Jobs</h2>
+          <a href="/admin/jobs/pending" class="btn btn-primary">Review Pending Jobs</a>
+        </div>
+        
+        <div class="jobs-table">
+          <table>
+            <thead>
+              <tr>
+                <th>Job Title</th>
+                <th>Company</th>
+                <th>Category</th>
+                <th>Status</th>
+                <th>Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              {recentJobs.results.map((job: any) => (
+                <tr>
+                  <td>
+                    <a href={`/jobs/${job.id}`}>{job.job_title}</a>
+                  </td>
+                  <td>{job.company_name || 'Unknown'}</td>
+                  <td>{job.category || 'Uncategorized'}</td>
+                  <td>
+                    <span class="badge badge-success">Approved</span>
+                  </td>
+                  <td>{new Date(job.created_at).toLocaleDateString()}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="admin-actions">
+        <h2>Quick Actions</h2>
+        <div class="actions-grid">
+          <a href="/admin/jobs/pending" class="action-card">
+            <h3>Review Pending Jobs</h3>
+            <p>Approve or reject new job submissions</p>
+          </a>
+          <a href="/admin/jobs/approved" class="action-card">
+            <h3>Manage Approved Jobs</h3>
+            <p>View and manage all approved jobs</p>
+          </a>
+        </div>
+      </section>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .admin-dashboard {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--spacing-lg);
+    margin-bottom: var(--spacing-2xl);
+  }
+
+  .stat-card {
+    background-color: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-lg);
+    text-align: center;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .stat-card h3 {
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-text-muted);
+    margin-bottom: var(--spacing-sm);
+  }
+
+  .stat-number {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--color-text);
+    margin: 0;
+  }
+
+  .stat-number.pending {
+    color: var(--color-warning);
+  }
+
+  .stat-number.approved {
+    color: var(--color-success);
+  }
+
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-lg);
+  }
+
+  .jobs-table {
+    background-color: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  th {
+    background-color: var(--color-bg-alt);
+    padding: var(--spacing-md);
+    text-align: left;
+    font-weight: 600;
+    color: var(--color-text);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  td {
+    padding: var(--spacing-md);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  tr:last-child td {
+    border-bottom: none;
+  }
+
+  .actions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--spacing-lg);
+  }
+
+  .action-card {
+    background-color: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-lg);
+    text-decoration: none;
+    color: var(--color-text);
+    transition: box-shadow 0.2s, transform 0.2s;
+    display: block;
+  }
+
+  .action-card:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+    text-decoration: none;
+    color: var(--color-text);
+  }
+
+  .action-card h3 {
+    margin-bottom: var(--spacing-sm);
+    color: var(--color-primary);
+  }
+
+  .action-card p {
+    color: var(--color-text-muted);
+    margin: 0;
+  }
+
+  @media (max-width: 768px) {
+    .section-header {
+      flex-direction: column;
+      gap: var(--spacing-md);
+      align-items: stretch;
+    }
+
+    .stats-grid {
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    }
+
+    .jobs-table {
+      overflow-x: auto;
+    }
+
+    table {
+      min-width: 600px;
+    }
+  }
+</style>

@@ -1,0 +1,95 @@
+---
+interface Props {
+  currentPath?: string;
+}
+
+const { currentPath = '/' } = Astro.props;
+
+const user = Astro.locals.user;
+---
+
+<header>
+  <div class="container">
+    <nav>
+      <div class="nav-brand">
+        <a href="/">
+          <strong>RemoteJobs.com.my</strong>
+        </a>
+      </div>
+      <div class="nav-links">
+        <a href="/" class={currentPath === '/' ? 'active' : ''}>Jobs</a>
+        {user ? (
+          <>
+            <a href="/dashboard" class={currentPath === '/dashboard' ? 'active' : ''}>Dashboard</a>
+            {user && user.role === 'admin' && (
+              <a href="/admin" class={currentPath.startsWith('/admin') ? 'active' : ''}>Admin</a>
+            )}
+            <a href="/api/auth/logout">Logout</a>
+          </>
+        ) : (
+          <>
+            <a href="/login" class={currentPath === '/login' ? 'active' : ''}>Login</a>
+            <a href="/register" class={currentPath === '/register' ? 'active' : ''}>Register</a>
+          </>
+        )}
+      </div>
+    </nav>
+  </div>
+</header>
+
+<style>
+  header {
+    background-color: var(--color-bg);
+    border-bottom: 1px solid var(--color-border);
+    padding: var(--spacing-md) 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .nav-brand a {
+    font-size: 1.25rem;
+    color: var(--color-text);
+    font-weight: 700;
+  }
+
+  .nav-brand a:hover {
+    text-decoration: none;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: var(--spacing-lg);
+    align-items: center;
+  }
+
+  .nav-links a {
+    color: var(--color-text-muted);
+    font-weight: 500;
+  }
+
+  .nav-links a:hover,
+  .nav-links a.active {
+    color: var(--color-primary);
+    text-decoration: none;
+  }
+
+  @media (max-width: 640px) {
+    nav {
+      flex-direction: column;
+      gap: var(--spacing-md);
+    }
+
+    .nav-links {
+      gap: var(--spacing-md);
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+  }
+</style>

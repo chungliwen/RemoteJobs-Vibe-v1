@@ -1,14 +1,28 @@
 {
-  "name": "absolute-aperture",
+  "name": "remotejobs-my",
   "type": "module",
   "version": "0.0.1",
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "test": "playwright test",
+    "test:ui": "playwright test --ui",
+    "test:report": "playwright show-report",
+    "db:migrate": "wrangler d1 execute remotejobs-db --local --file=./migrations/0001_initial.sql",
+    "db:seed": "wrangler d1 execute remotejobs-db --local --file=./migrations/seed.sql",
+    "db:query": "wrangler d1 execute remotejobs-db --local --command",
+    "scrape": "tsc scripts/scraper.ts --outDir dist && node dist/scraper.js"
   },
   "dependencies": {
-    "astro": "^5.16.4"
+    "@astrojs/check": "^0.9.6",
+    "astro": "^5.16.4",
+    "typescript": "^5.9.3"
+  },
+  "devDependencies": {
+    "@astrojs/cloudflare": "^12.6.12",
+    "@playwright/test": "^1.57.0",
+    "wrangler": "^4.53.0"
   }
 }
