@@ -1,0 +1,291 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { getDb } from '../../../lib/db';
+import { CATEGORIES, COVERAGE } from '../../../lib/utils';
+
+// Check if user is admin
+if (!Astro.locals.user || Astro.locals.user.role !== 'admin') {
+  return Astro.redirect('/');
+}
+
+const { id } = Astro.params;
+
+if (!id) {
+  return Astro.redirect('/admin/jobs/approved');
+}
+
+const db = getDb(Astro.locals);
+
+// Get job details
+const job = await db.prepare(`
+  SELECT 
+    job_listings.*,
+    companies.name as company_name
+  FROM job_listings
+  LEFT JOIN companies ON job_listings.company_id = companies.id
+  WHERE job_listings.id = ?
+`).bind(id).first();
+
+if (!job) {
+  return Astro.redirect('/admin/jobs/approved');
+}
+---
+
+<BaseLayout title={`Edit Job | Admin | RemoteJobs.com.my`}>
+  <div class="container">
+    <div class="admin-page">
+      <div class="page-header">
+        <h1>Edit Job</h1>
+        <a href="/admin/jobs/approved" class="btn btn-secondary">← Back to Jobs</a>
+      </div>
+
+      <form id="editJobForm" class="edit-form">
+        <input type="hidden" name="job_id" value={job.id} />
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label for="job_title">Job Title *</label>
+            <input
+              type="text"
+              id="job_title"
+              name="job_title"
+              value={job.job_title}
+              required
+              class="form-input"
+            />
+          </div>
+          
+          <div class="form-group">
+            <label for="company_name">Company Name</label>
+            <input
+              type="text"
+              id="company_name"
+              name="company_name"
+              value={job.company_name || ''}
+              class="form-input"
+            />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="category">Category</label>
+            <select id="category" name="category" class="form-input">
+              <option value="">Select Category</option>
+              {Object.entries(CATEGORIES).map(([slug, label]) => (
+                <option value={slug} selected={job.category === slug}>
+                  {label}
+                </option>
+              ))}
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label for="coverage">Coverage</label>
+            <select id="coverage" name="coverage" class="form-input">
+              {Object.entries(COVERAGE).map(([slug, label]) => (
+                <option value={slug} selected={job.coverage === slug}>
+                  {label}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="job_type">Job Type</label>
+            <input
+              type="text"
+              id="job_type"
+              name="job_type"
+              value={job.job_type || 'remote'}
+              class="form-input"
+            />
+          </div>
+          
+          <div class="form-group">
+            <label for="listing_date">Listing Date</label>
+            <input
+              type="date"
+              id="listing_date"
+              name="listing_date"
+              value={job.listing_date || ''}
+              class="form-input"
+            />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="listing_url">Listing URL *</label>
+          <input
+            type="url"
+            id="listing_url"
+            name="listing_url"
+            value={job.listing_url}
+            required
+            class="form-input"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="platform">Platform</label>
+          <input
+            type="text"
+            id="platform"
+            name="platform"
+            value={job.platform || ''}
+            class="form-input"
+          />
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary" id="saveBtn">
+            Save Changes
+          </button>
+          <a href="/admin/jobs/approved" class="btn btn-secondary">
+            Cancel
+          </a>
+        </div>
+      </form>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .admin-page {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-xl);
+    flex-wrap: wrap;
+    gap: var(--spacing-md);
+  }
+
+  .edit-form {
+    background-color: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-xl);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-lg);
+    margin-bottom: var(--spacing-lg);
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+  }
+
+  .form-group label {
+    font-weight: 500;
+    color: var(--color-text);
+  }
+
+  .form-input {
+    padding: var(--spacing-md);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    font-size: 1rem;
+    background-color: var(--color-bg);
+    color: var(--color-text);
+  }
+
+  .form-input:focus {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+
+  .form-actions {
+    display: flex;
+    gap: var(--spacing-md);
+    margin-top: var(--spacing-xl);
+    flex-wrap: wrap;
+  }
+
+  @media (max-width: 640px) {
+    .page-header {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .form-row {
+      grid-template-columns: 1fr;
+    }
+
+    .form-actions {
+      flex-direction: column;
+    }
+
+    .form-actions button,
+    .form-actions a {
+      width: 100%;
+      text-align: center;
+    }
+  }
+</style>
+
+<script>
+  const editJobForm = document.getElementById('editJobForm') as HTMLFormElement;
+  if (editJobForm) {
+    editJobForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const formData = new FormData(editJobForm);
+      const saveBtn = document.getElementById('saveBtn') as HTMLButtonElement;
+      
+      // Disable button
+      if (saveBtn) {
+        saveBtn.disabled = true;
+        saveBtn.textContent = 'Saving...';
+      }
+      
+      try {
+        const response = await fetch('/api/admin/jobs/edit', {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            job_id: parseInt(formData.get('job_id') as string),
+            job_title: formData.get('job_title'),
+            company_name: formData.get('company_name'),
+            category: formData.get('category'),
+            coverage: formData.get('coverage'),
+            job_type: formData.get('job_type'),
+            listing_date: formData.get('listing_date'),
+            listing_url: formData.get('listing_url'),
+            platform: formData.get('platform')
+          }),
+        });
+        
+        const data = await response.json();
+        
+        if (response.ok) {
+          alert('Job updated successfully!');
+          window.location.href = '/admin/jobs/approved';
+        } else {
+          alert('Error: ' + (data.error || 'Something went wrong'));
+        }
+      } catch (error) {
+        alert('Network error. Please try again.');
+      } finally {
+        if (saveBtn) {
+          saveBtn.disabled = false;
+          saveBtn.textContent = 'Save Changes';
+        }
+      }
+    });
+  }
+</script>

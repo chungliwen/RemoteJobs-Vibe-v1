@@ -1,44 +1,18 @@
 ---
+import { formatDate, getCategoryLabel, getCoverageLabel } from '../lib/utils';
+
 interface Props {
   job: any;
-  company?: any;
 }
 
-const { job, company } = Astro.props;
+const { job } = Astro.props;
 
-function formatDate(date: string | null): string {
-  if (!date) return 'N/A';
-  const d = new Date(date);
-  return d.toLocaleDateString('en-MY', {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric'
-  });
-}
-
-function getCategoryLabel(slug: string | null): string {
-  if (!slug) return 'Uncategorized';
-  const categories = {
-    'tech-development': 'Tech/Development',
-    'design-creative': 'Design/Creative',
-    'writing-content': 'Writing/Content',
-    'admin-virtual-assistant': 'Admin/Virtual Assistant',
-    'marketing-social-media': 'Marketing/Social Media',
-    'customer-support': 'Customer Support',
-    'other': 'Other'
-  };
-  return categories[slug as keyof typeof categories] || 'Other';
-}
-
-function getCoverageLabel(slug: string): string {
-  const coverage = {
-    'malaysia': 'Malaysia',
-    'asia': 'Asia',
-    'worldwide': 'Worldwide',
-    'other': 'Other'
-  };
-  return coverage[slug as keyof typeof coverage] || 'Other';
-}
+// Extract company info from the joined query result
+const company = job.company_name ? {
+  name: job.company_name,
+  website: job.company_website,
+  logo_url: job.company_logo_url
+} : null;
 ---
 
 <article class="job-card">

@@ -6,7 +6,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   <div class="container">
     <div class="auth-container">
       <div class="auth-card">
-        <h1>Sign Up</h1>
+        <h1>Register</h1>
         <p class="text-muted mb-lg">
           Create an account to save job preferences and get notified about new opportunities.
         </p>
@@ -132,52 +132,61 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 </style>
 
 <script>
-  document.getElementById('registerForm').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    
-    const form = e.target as HTMLFormElement;
-    const email = form.email.value;
-    const submitBtn = document.getElementById('registerBtn') as HTMLButtonElement;
-    const messageDiv = document.getElementById('message');
-    
-    // Disable button
-    if (submitBtn) {
-      submitBtn.disabled = true;
-      submitBtn.textContent = 'Creating account...';
-    }
-    
-    try {
-      const response = await fetch('/api/auth/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email }),
-      });
+  const registerForm = document.getElementById('registerForm');
+  if (registerForm) {
+    registerForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
       
-      const data = await response.json();
+      const form = e.target as HTMLFormElement;
+      const email = form.email.value;
+      const submitBtn = document.getElementById('registerBtn') as HTMLButtonElement;
+      const messageDiv = document.getElementById('message');
       
-      if (response.ok) {
-        messageDiv.className = 'message success';
-        messageDiv.textContent = 'Account created! Magic link sent to your email.';
-        
-        // In development, show the link
-        if (data.link) {
-          messageDiv.innerHTML += `<br><small>Dev: <a href="${data.link}">Click here to login</a></small>`;
-        }
-      } else {
-        messageDiv.className = 'message error';
-        messageDiv.textContent = data.error || 'Something went wrong';
-      }
-    } catch (error) {
-      messageDiv.className = 'message error';
-      messageDiv.textContent = 'Network error. Please try again.';
-    } finally {
-      if (messageDiv) messageDiv.style.display = 'block';
+      // Disable button
       if (submitBtn) {
-        submitBtn.disabled = false;
-        submitBtn.textContent = 'Create Account';
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Creating account...';
       }
-    }
-  });
+      
+      try {
+        const response = await fetch('/api/auth/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ email }),
+        });
+        
+        const data = await response.json();
+        
+        if (response.ok) {
+          if (messageDiv) {
+            messageDiv.className = 'message success';
+            messageDiv.textContent = 'Account created! Magic link sent to your email.';
+            
+            // In development, show the link
+            if (data.link) {
+              messageDiv.innerHTML += `<br><small>Dev: <a href="${data.link}">Click here to login</a></small>`;
+            }
+          }
+        } else {
+          if (messageDiv) {
+            messageDiv.className = 'message error';
+            messageDiv.textContent = data.error || 'Something went wrong';
+          }
+        }
+      } catch (error) {
+        if (messageDiv) {
+          messageDiv.className = 'message error';
+          messageDiv.textContent = 'Network error. Please try again.';
+        }
+      } finally {
+        if (messageDiv) messageDiv.style.display = 'block';
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Create Account';
+        }
+      }
+    });
+  }
 </script>

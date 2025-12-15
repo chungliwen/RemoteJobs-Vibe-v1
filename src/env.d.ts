@@ -13,7 +13,7 @@ declare global {
       } | null;
       runtime: {
         env: {
-          DB: D1Database;
+          DB: any;
         };
       };
     }

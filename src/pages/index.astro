@@ -2,23 +2,84 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import JobCard from '../components/JobCard.astro';
 import JobFilters from '../components/JobFilters.astro';
+import { getDb } from '../lib/db';
+import { getCategoryLabel, getCoverageLabel } from '../lib/utils';
 
 // Get filter params from URL
 const url = new URL(Astro.request.url);
 const categoryFilter = url.searchParams.get('category');
 const coverageFilter = url.searchParams.get('coverage');
+const searchQuery = url.searchParams.get('search');
+const page = parseInt(url.searchParams.get('page') || '1');
+const limit = 12;
+const offset = (page - 1) * limit;
 
-// Load real job data from WeWorkRemotely
-const { realJobs } = await import('../scripts/real-jobs.cjs');
+// Get database connection
+const db = getDb(Astro.locals);
 
-// Apply filters
-let jobListings = realJobs;
+// Build query with filters
+let query = `
+  SELECT 
+    job_listings.*,
+    companies.name as company_name,
+    companies.website as company_website,
+    companies.logo_url as company_logo_url
+  FROM job_listings
+  LEFT JOIN companies ON job_listings.company_id = companies.id
+  WHERE job_listings.status = 'approved' AND job_listings.visible = 1
+`;
+const params: any[] = [];
+
+if (searchQuery) {
+  query += ` AND (job_listings.job_title LIKE ? OR companies.name LIKE ?)`;
+  params.push(`%${searchQuery}%`, `%${searchQuery}%`);
+}
+
 if (categoryFilter) {
-  jobListings = jobListings.filter((job: any) => job.category === categoryFilter);
+  query += ` AND job_listings.category = ?`;
+  params.push(categoryFilter);
 }
+
 if (coverageFilter) {
-  jobListings = jobListings.filter((job: any) => job.coverage === coverageFilter);
+  query += ` AND job_listings.coverage = ?`;
+  params.push(coverageFilter);
 }
+
+query += ` ORDER BY job_listings.listing_date DESC, job_listings.created_at DESC LIMIT ? OFFSET ?`;
+params.push(limit, offset);
+
+// Get total count for pagination
+let countQuery = `
+  SELECT COUNT(*) as total
+  FROM job_listings
+  LEFT JOIN companies ON job_listings.company_id = companies.id
+  WHERE job_listings.status = 'approved' AND job_listings.visible = 1
+`;
+const countParams: any[] = [];
+
+if (searchQuery) {
+  countQuery += ` AND (job_listings.job_title LIKE ? OR companies.name LIKE ?)`;
+  countParams.push(`%${searchQuery}%`, `%${searchQuery}%`);
+}
+
+if (categoryFilter) {
+  countQuery += ` AND job_listings.category = ?`;
+  countParams.push(categoryFilter);
+}
+
+if (coverageFilter) {
+  countQuery += ` AND job_listings.coverage = ?`;
+  countParams.push(coverageFilter);
+}
+
+const totalCountResult = await db.prepare(countQuery).bind(...countParams).first();
+const totalCount = Number(totalCountResult?.total || 0);
+const totalPages = Math.ceil(totalCount / limit);
+
+// Get jobs from database
+const result = await db.prepare(query).bind(...params).all();
+const jobListings = result.results || [];
+---
 
 <BaseLayout title="Remote Jobs for Malaysians | RemoteJobs.com.my">
   <div class="container">
@@ -33,6 +94,25 @@ if (coverageFilter) {
     <section class="jobs-section">
       <h2 class="mb-lg">Latest Jobs</h2>
 
+      <!-- Search Bar -->
+      <div class="search-container mb-lg">
+        <form method="GET" action="/" class="search-form">
+          <div class="search-input-group">
+            <input
+              type="text"
+              name="search"
+              placeholder="Search jobs by title or company..."
+              value={url.searchParams.get('search') || ''}
+              class="search-input"
+            />
+            <button type="submit" class="btn btn-primary search-btn">Search</button>
+          </div>
+          {url.searchParams.get('search') && (
+            <a href="/" class="clear-search">Clear search</a>
+          )}
+        </form>
+      </div>
+
       <JobFilters currentCategory={categoryFilter} currentCoverage={coverageFilter} />
 
       {jobListings.length === 0 ? (
@@ -44,17 +124,39 @@ if (coverageFilter) {
       ) : (
         <div class="jobs-grid">
           {jobListings.map((job: any) => (
-            <JobCard
-              job={job}
-              company={{
-                id: 1,
-                name: job.company_name,
-                website: null,
-                logo_url: null,
-                created_at: ''
-              }}
-            />
+            <JobCard job={job} />
           ))}
+        </div>
+      )}
+
+      <!-- Pagination -->
+      {totalPages > 1 && (
+        <div class="pagination">
+          {page > 1 && (
+            <a href={`?${new URLSearchParams({
+              ...(searchQuery && { search: searchQuery }),
+              ...(categoryFilter && { category: categoryFilter }),
+              ...(coverageFilter && { coverage: coverageFilter }),
+              page: String(page - 1)
+            }).toString()}`} class="pagination-link">
+              ← Previous
+            </a>
+          )}
+          
+          <span class="pagination-info">
+            Page {page} of {totalPages} ({totalCount} jobs)
+          </span>
+          
+          {page < totalPages && (
+            <a href={`?${new URLSearchParams({
+              ...(searchQuery && { search: searchQuery }),
+              ...(categoryFilter && { category: categoryFilter }),
+              ...(coverageFilter && { coverage: coverageFilter }),
+              page: String(page + 1)
+            }).toString()}`} class="pagination-link">
+              Next →
+            </a>
+          )}
         </div>
       )}
     </section>
@@ -89,6 +191,53 @@ if (coverageFilter) {
     gap: var(--spacing-lg);
   }
 
+  .search-container {
+    background-color: var(--color-bg-alt);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-lg);
+  }
+
+  .search-form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+  }
+
+  .search-input-group {
+    display: flex;
+    gap: var(--spacing-sm);
+  }
+
+  .search-input {
+    flex: 1;
+    padding: var(--spacing-md);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    font-size: 1rem;
+    background-color: var(--color-bg);
+    color: var(--color-text);
+  }
+
+  .search-input:focus {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+
+  .search-btn {
+    white-space: nowrap;
+  }
+
+  .clear-search {
+    color: var(--color-text-muted);
+    font-size: 0.875rem;
+    align-self: flex-start;
+  }
+
+  .clear-search:hover {
+    color: var(--color-primary);
+  }
+
   @media (max-width: 640px) {
     .hero h1 {
       font-size: 1.75rem;
@@ -101,5 +250,200 @@ if (coverageFilter) {
     .jobs-grid {
       grid-template-columns: 1fr;
     }
+
+    .search-input-group {
+      flex-direction: column;
+    }
+
+    .search-btn {
+      width: 100%;
+    }
+  }
+
+  .newsletter-section {
+    margin-top: var(--spacing-2xl);
+    text-align: center;
+  }
+
+  .newsletter-card {
+    background-color: var(--color-bg-alt);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-2xl);
+    max-width: 500px;
+    margin: 0 auto;
+  }
+
+  .newsletter-card h2 {
+    margin-bottom: var(--spacing-md);
+    color: var(--color-text);
+  }
+
+  .newsletter-card p {
+    margin-bottom: var(--spacing-lg);
+    color: var(--color-text-muted);
+  }
+
+  .newsletter-form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+  }
+
+  .newsletter-input-group {
+    display: flex;
+    gap: var(--spacing-sm);
+  }
+
+  .newsletter-input {
+    flex: 1;
+    padding: var(--spacing-md);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    font-size: 1rem;
+    background-color: var(--color-bg);
+    color: var(--color-text);
+  }
+
+  .newsletter-input:focus {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+
+  .newsletter-btn {
+    white-space: nowrap;
+  }
+
+  .newsletter-message {
+    padding: var(--spacing-sm);
+    border-radius: var(--radius-md);
+    font-size: 0.875rem;
+    display: none;
+  }
+
+  .newsletter-message.success {
+    background-color: #d1fae5;
+    color: #065f46;
+    border: 1px solid #10b981;
+  }
+
+  .newsletter-message.error {
+    background-color: #fee2e2;
+    color: #991b1b;
+    border: 1px solid #ef4444;
+  }
+
+  @media (max-width: 640px) {
+    .newsletter-input-group {
+      flex-direction: column;
+    }
+
+    .newsletter-btn {
+      width: 100%;
+    }
+  }
+
+  .pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: var(--spacing-lg);
+    margin-top: var(--spacing-xl);
+    flex-wrap: wrap;
+  }
+
+  .pagination-link {
+    color: var(--color-primary);
+    text-decoration: none;
+    font-weight: 500;
+    padding: var(--spacing-sm) var(--spacing-md);
+    border: 1px solid var(--color-primary);
+    border-radius: var(--radius-md);
+    transition: all 0.2s;
+  }
+
+  .pagination-link:hover {
+    background-color: var(--color-primary);
+    color: white;
+    text-decoration: none;
+  }
+
+  .pagination-info {
+    color: var(--color-text-muted);
+    font-size: 0.875rem;
+    margin: 0 var(--spacing-md);
+  }
+
+  @media (max-width: 640px) {
+    .pagination {
+      flex-direction: column;
+      gap: var(--spacing-md);
+    }
+
+    .pagination-link {
+      width: 100%;
+      text-align: center;
+    }
+
+    .pagination-info {
+      margin: var(--spacing-sm) 0;
+    }
   }
 </style>
+
+<script>
+  // Newsletter form handler
+  const newsletterForm = document.getElementById('newsletterForm');
+  if (newsletterForm) {
+    newsletterForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const form = e.target as HTMLFormElement;
+      const email = (form.email as HTMLInputElement).value;
+      const submitBtn = form.querySelector('button[type="submit"]') as HTMLButtonElement;
+      const messageDiv = document.getElementById('newsletterMessage');
+      
+      // Disable button
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Subscribing...';
+      }
+      
+      try {
+        const response = await fetch('/api/newsletter/subscribe', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ email }),
+        });
+        
+        const data = await response.json();
+        
+        if (response.ok) {
+          if (messageDiv) {
+            messageDiv.className = 'newsletter-message success';
+            messageDiv.textContent = 'Successfully subscribed! Check your email for confirmation.';
+          }
+          form.reset();
+        } else {
+          if (messageDiv) {
+            messageDiv.className = 'newsletter-message error';
+            messageDiv.textContent = data.error || 'Something went wrong';
+          }
+        }
+      } catch (error) {
+        if (messageDiv) {
+          messageDiv.className = 'newsletter-message error';
+          messageDiv.textContent = 'Network error. Please try again.';
+        }
+      } finally {
+        if (messageDiv) messageDiv.style.display = 'block';
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Subscribe';
+        }
+      }
+    });
+  }
+</script>

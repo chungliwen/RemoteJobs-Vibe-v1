@@ -16,7 +16,12 @@ const user = Astro.locals.user;
           <strong>RemoteJobs.com.my</strong>
         </a>
       </div>
-      <div class="nav-links">
+      <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Toggle mobile menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      <div class="nav-links" id="navLinks">
         <a href="/" class={currentPath === '/' ? 'active' : ''}>Jobs</a>
         {user ? (
           <>
@@ -36,6 +41,34 @@ const user = Astro.locals.user;
     </nav>
   </div>
 </header>
+
+<script>
+  const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+  const navLinks = document.getElementById('navLinks');
+  
+  if (mobileMenuBtn && navLinks) {
+    mobileMenuBtn.addEventListener('click', () => {
+      mobileMenuBtn.classList.toggle('active');
+      navLinks.classList.toggle('active');
+    });
+
+    // Close menu when clicking outside
+    document.addEventListener('click', (e) => {
+      if (!mobileMenuBtn.contains(e.target as Node) && !navLinks.contains(e.target as Node)) {
+        mobileMenuBtn.classList.remove('active');
+        navLinks.classList.remove('active');
+      }
+    });
+
+    // Close menu when clicking on a link
+    navLinks.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        mobileMenuBtn.classList.remove('active');
+        navLinks.classList.remove('active');
+      });
+    });
+  }
+</script>
 
 <style>
   header {
@@ -80,16 +113,81 @@ const user = Astro.locals.user;
     text-decoration: none;
   }
 
+  .mobile-menu-btn {
+    display: none;
+    flex-direction: column;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: var(--spacing-xs);
+  }
+
+  .mobile-menu-btn span {
+    width: 25px;
+    height: 3px;
+    background-color: var(--color-text);
+    margin: 3px 0;
+    transition: 0.3s;
+  }
+
+  .mobile-menu-btn.active span:nth-child(1) {
+    transform: rotate(-45deg) translate(-5px, 6px);
+  }
+
+  .mobile-menu-btn.active span:nth-child(2) {
+    opacity: 0;
+  }
+
+  .mobile-menu-btn.active span:nth-child(3) {
+    transform: rotate(45deg) translate(-5px, -6px);
+  }
+
   @media (max-width: 640px) {
     nav {
       flex-direction: column;
       gap: var(--spacing-md);
     }
 
+    .mobile-menu-btn {
+      display: flex;
+      position: absolute;
+      top: var(--spacing-md);
+      right: var(--spacing-md);
+    }
+
     .nav-links {
-      gap: var(--spacing-md);
-      flex-wrap: wrap;
-      justify-content: center;
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background-color: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-top: none;
+      flex-direction: column;
+      gap: 0;
+      padding: var(--spacing-md) 0;
+      box-shadow: var(--shadow-md);
+      z-index: 1000;
+    }
+
+    .nav-links.active {
+      display: flex;
+    }
+
+    .nav-links a {
+      padding: var(--spacing-md) var(--spacing-lg);
+      border-bottom: 1px solid var(--color-border);
+      margin: 0;
+    }
+
+    .nav-links a:last-child {
+      border-bottom: none;
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active {
+      background-color: var(--color-bg-alt);
     }
   }
 </style>

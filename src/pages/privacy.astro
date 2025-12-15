@@ -1,0 +1,136 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Privacy Policy | RemoteJobs.com.my">
+  <div class="container">
+    <div class="legal-page">
+      <h1>Privacy Policy</h1>
+      <p class="updated">Last updated: {new Date().toLocaleDateString('en-MY', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
+      
+      <section class="policy-section">
+        <h2>Information We Collect</h2>
+        <p>We collect the following information to provide our services:</p>
+        <ul>
+          <li><strong>Email Address:</strong> When you register for an account or subscribe to our newsletter</li>
+          <li><strong>Job Preferences:</strong> Categories of jobs you're interested in</li>
+          <li><strong>Newsletter Subscription:</strong> Whether you opt-in to receive job newsletters</li>
+          <li><strong>Usage Data:</strong> How you interact with our website (anonymized)</li>
+        </ul>
+      </section>
+
+      <section class="policy-section">
+        <h2>How We Use Your Information</h2>
+        <p>Your information is used to:</p>
+        <ul>
+          <li>Provide personalized job recommendations based on your preferences</li>
+          <li>Send you weekly job newsletters (if you opt-in)</li>
+          <li>Improve our services and user experience</li>
+          <li>Analyze usage patterns to optimize our platform</li>
+        </ul>
+      </section>
+
+      <section class="policy-section">
+        <h2>Data Protection</h2>
+        <p>We take data protection seriously:</p>
+        <ul>
+          <li>All passwords are securely hashed and never stored in plain text</li>
+          <li>We use secure HTTPS encryption for all data transmission</li>
+          <li>Your data is stored securely with Cloudflare's D1 database</li>
+          <li>We never sell your personal information to third parties</li>
+        </ul>
+      </section>
+
+      <section class="policy-section">
+        <h2>Cookies</h2>
+        <p>We use essential cookies to:</p>
+        <ul>
+          <li>Keep you logged in to your account</li>
+          <li>Remember your preferences</li>
+          <li>Provide basic website functionality</li>
+        </ul>
+        <p>You can disable cookies in your browser settings, but this may affect website functionality.</p>
+      </section>
+
+      <section class="policy-section">
+        <h2>Third-Party Services</h2>
+        <p>We use the following third-party services:</p>
+        <ul>
+          <li><strong>Cloudflare:</strong> For hosting, security, and database services</li>
+          <li><strong>WeWorkRemotely:</strong> As a source for job listings (publicly available data)</li>
+        </ul>
+      </section>
+
+      <section class="policy-section">
+        <h2>Your Rights</h2>
+        <p>You have the right to:</p>
+        <ul>
+          <li>Access your personal data</li>
+          <li>Correct inaccurate information</li>
+          <li>Delete your account and associated data</li>
+          <li>Opt-out of newsletter communications</li>
+          <li>Request a copy of your data</li>
+        </ul>
+      </section>
+
+      <section class="policy-section">
+        <h2>Contact Us</h2>
+        <p>If you have questions about this Privacy Policy or need to exercise your rights, please contact us at:</p>
+        <p><strong>Email:</strong> privacy@remotejobs.com.my</p>
+        <p>We'll respond to your inquiry within 30 days.</p>
+      </section>
+
+      <section class="policy-section">
+        <h2>Changes to This Policy</h2>
+        <p>We may update this Privacy Policy from time to time. We'll notify you of any significant changes by:</p>
+        <ul>
+          <li>Posting the updated policy on our website</li>
+          <li>Sending an email notification (if you're subscribed to our newsletter)</li>
+          <li>Updating the "Last updated" date at the top of this policy</li>
+        </ul>
+      </section>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .legal-page {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .legal-page h1 {
+    margin-bottom: var(--spacing-md);
+    color: var(--color-text);
+  }
+
+  .updated {
+    color: var(--color-text-muted);
+    font-style: italic;
+    margin-bottom: var(--spacing-xl);
+  }
+
+  .policy-section {
+    margin-bottom: var(--spacing-2xl);
+  }
+
+  .policy-section h2 {
+    margin-bottom: var(--spacing-md);
+    color: var(--color-text);
+  }
+
+  .policy-section p {
+    margin-bottom: var(--spacing-md);
+    line-height: 1.6;
+  }
+
+  .policy-section ul {
+    margin-left: var(--spacing-lg);
+    margin-bottom: var(--spacing-md);
+  }
+
+  .policy-section li {
+    margin-bottom: var(--spacing-xs);
+    line-height: 1.5;
+  }
+</style>

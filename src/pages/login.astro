@@ -132,52 +132,61 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 </style>
 
 <script>
-  document.getElementById('loginForm').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    
-    const form = e.target as HTMLFormElement;
-    const email = form.email.value;
-    const submitBtn = document.getElementById('loginBtn') as HTMLButtonElement;
-    const messageDiv = document.getElementById('message');
-    
-    // Disable button
-    if (submitBtn) {
-      submitBtn.disabled = true;
-      submitBtn.textContent = 'Sending...';
-    }
-    
-    try {
-      const response = await fetch('/api/auth/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email }),
-      });
+  const loginForm = document.getElementById('loginForm');
+  if (loginForm) {
+    loginForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
       
-      const data = await response.json();
+      const form = e.target as HTMLFormElement;
+      const email = form.email.value;
+      const submitBtn = document.getElementById('loginBtn') as HTMLButtonElement;
+      const messageDiv = document.getElementById('message');
       
-      if (response.ok) {
-        messageDiv.className = 'message success';
-        messageDiv.textContent = 'Magic link sent! Check your email (and console for dev link).';
-        
-        // In development, show the link
-        if (data.link) {
-          messageDiv.innerHTML += `<br><small>Dev: <a href="${data.link}">Click here to login</a></small>`;
-        }
-      } else {
-        messageDiv.className = 'message error';
-        messageDiv.textContent = data.error || 'Something went wrong';
-      }
-    } catch (error) {
-      messageDiv.className = 'message error';
-      messageDiv.textContent = 'Network error. Please try again.';
-    } finally {
-      if (messageDiv) messageDiv.style.display = 'block';
+      // Disable button
       if (submitBtn) {
-        submitBtn.disabled = false;
-        submitBtn.textContent = 'Send Magic Link';
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Sending...';
       }
-    }
-  });
+      
+      try {
+        const response = await fetch('/api/auth/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ email }),
+        });
+        
+        const data = await response.json();
+        
+        if (response.ok) {
+          if (messageDiv) {
+            messageDiv.className = 'message success';
+            messageDiv.textContent = 'Magic link sent! Check your email (and console for dev link).';
+            
+            // In development, show the link
+            if (data.link) {
+              messageDiv.innerHTML += `<br><small>Dev: <a href="${data.link}">Click here to login</a></small>`;
+            }
+          }
+        } else {
+          if (messageDiv) {
+            messageDiv.className = 'message error';
+            messageDiv.textContent = data.error || 'Something went wrong';
+          }
+        }
+      } catch (error) {
+        if (messageDiv) {
+          messageDiv.className = 'message error';
+          messageDiv.textContent = 'Network error. Please try again.';
+        }
+      } finally {
+        if (messageDiv) messageDiv.style.display = 'block';
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Send Magic Link';
+        }
+      }
+    });
+  }
 </script>

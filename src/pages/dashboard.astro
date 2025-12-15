@@ -159,7 +159,9 @@ const preferences = user.category_preferences ? JSON.parse(user.category_prefere
 </style>
 
 <script>
-  document.getElementById('preferencesForm').addEventListener('submit', async (e) => {
+  const preferencesForm = document.getElementById('preferencesForm');
+  if (preferencesForm) {
+    preferencesForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     
     const form = e.target as HTMLFormElement;
@@ -217,5 +219,6 @@ const preferences = user.category_preferences ? JSON.parse(user.category_prefere
         saveBtn.textContent = 'Save Preferences';
       }
     }
-  });
+    });
+  }
 </script>

@@ -1,0 +1,191 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Terms of Service | RemoteJobs.com.my">
+  <div class="container">
+    <div class="legal-page">
+      <h1>Terms of Service</h1>
+      <p class="updated">Last updated: {new Date().toLocaleDateString('en-MY', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
+      
+      <section class="policy-section">
+        <h2>Acceptance of Terms</h2>
+        <p>By accessing and using RemoteJobs.com.my, you accept and agree to be bound by these Terms of Service. If you do not agree to these terms, please do not use our website.</p>
+      </section>
+
+      <section class="policy-section">
+        <h2>Service Description</h2>
+        <p>RemoteJobs.com.my is a job board platform that:</p>
+        <ul>
+          <li>Aggregates remote job listings from various sources</li>
+          <li>Focuses on opportunities suitable for Malaysians</li>
+          <li>Provides job search and filtering capabilities</li>
+          <li>Offers optional email notifications for new jobs</li>
+        </ul>
+      </section>
+
+      <section class="policy-section">
+        <h2>User Accounts</h2>
+        <p>When creating an account, you agree to:</p>
+        <ul>
+          <li>Provide accurate and current information</li>
+          <li>Maintain the security of your login credentials</li>
+          <li>Be responsible for all activities under your account</li>
+          <li>Notify us immediately of any unauthorized use</li>
+          <li>Be at least 18 years old or have parental consent</li>
+        </ul>
+      </section>
+
+      <section class="policy-section">
+        <h2>Job Listings</h2>
+        <p><strong>Important:</strong> We are not an employer or recruitment agency. We:</p>
+        <ul>
+          <li>Do not guarantee the accuracy of job listings</li>
+          <li>Do not endorse any specific employers</li>
+          <li>Are not responsible for hiring decisions</li>
+          <li>Simply aggregate and display publicly available job information</li>
+        </ul>
+        <p>Always research employers and job opportunities before applying.</p>
+      </section>
+
+      <section class="policy-section">
+        <h2>Application Process</h2>
+        <p>When applying for jobs:</p>
+        <ul>
+          <li>You will be redirected to the original job posting</li>
+          <li>We are not involved in the application process</li>
+          <li>Employers contact you directly if interested</li>
+          <li>Never pay fees to apply for jobs through our platform</li>
+        </ul>
+      </section>
+
+      <section class="policy-section">
+        <h2>Prohibited Activities</h2>
+        <p>You may not use our service to:</p>
+        <ul>
+          <li>Post fake or misleading job listings</li>
+          <li>Apply for jobs you're not qualified for</li>
+          <li>Use automated tools to scrape our content</li>
+          <li>Attempt to gain unauthorized access to our systems</li>
+          <li>Harass other users or employers</li>
+          <li>Violate any applicable laws or regulations</li>
+        </ul>
+      </section>
+
+      <section class="policy-section">
+        <h2>Intellectual Property</h2>
+        <p>All content on RemoteJobs.com.my, including:</p>
+        <ul>
+          <li>Job listings and descriptions</li>
+          <li>Website design and layout</li>
+          <li>Logos, trademarks, and branding</li>
+          <li>Software and algorithms</li>
+        </ul>
+        <p>Are owned by RemoteJobs.com.my or our content partners and protected by copyright and other intellectual property laws.</p>
+      </section>
+
+      <section class="policy-section">
+        <h2>Limitation of Liability</h2>
+        <p>To the fullest extent permitted by law:</p>
+        <ul>
+          <li>We provide our service "as is" without warranties</li>
+          <li>We are not liable for any damages arising from your use</li>
+          <li>We are not responsible for employer actions or decisions</li>
+          <li>We do not guarantee job availability or accuracy</li>
+        </ul>
+      </section>
+
+      <section class="policy-section">
+        <h2>Service Availability</h2>
+        <p>We strive to maintain high service availability but:</p>
+        <ul>
+          <li>May experience downtime for maintenance</li>
+          <li>Cannot guarantee uninterrupted service</li>
+          <li>May modify or discontinue features at any time</li>
+          <li>Are not liable for service interruptions</li>
+        </ul>
+      </section>
+
+      <section class="policy-section">
+        <h2>Privacy</h2>
+        <p>Your privacy is important to us. Please review our Privacy Policy to understand:</p>
+        <ul>
+          <li>What information we collect</li>
+          <li>How we use and protect your data</li>
+          <li>Your rights regarding your personal information</li>
+        </ul>
+      </section>
+
+      <section class="policy-section">
+        <h2>Termination</h2>
+        <p>We may terminate or suspend your account if you:</p>
+        <ul>
+          <li>Violate these Terms of Service</li>
+          <li>Engage in fraudulent activities</li>
+          <li>Misuse our platform</li>
+          <li>Fail to provide accurate information</li>
+        </ul>
+        <p>You may delete your account at any time through your dashboard.</p>
+      </section>
+
+      <section class="policy-section">
+        <h2>Changes to Terms</h2>
+        <p>We reserve the right to modify these terms at any time. Changes will be effective immediately upon posting. Your continued use of our service constitutes acceptance of any modified terms.</p>
+      </section>
+
+      <section class="policy-section">
+        <h2>Contact Information</h2>
+        <p>If you have questions about these Terms of Service, please contact us:</p>
+        <p><strong>Email:</strong> legal@remotejobs.com.my</p>
+        <p><strong>Address:</strong> Virtual office, Malaysia</p>
+      </section>
+
+      <section class="policy-section">
+        <h2>Governing Law</h2>
+        <p>These Terms of Service are governed by and construed in accordance with the laws of Malaysia. Any disputes arising from these terms will be subject to the exclusive jurisdiction of Malaysian courts.</p>
+      </section>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .legal-page {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .legal-page h1 {
+    margin-bottom: var(--spacing-md);
+    color: var(--color-text);
+  }
+
+  .updated {
+    color: var(--color-text-muted);
+    font-style: italic;
+    margin-bottom: var(--spacing-xl);
+  }
+
+  .policy-section {
+    margin-bottom: var(--spacing-2xl);
+  }
+
+  .policy-section h2 {
+    margin-bottom: var(--spacing-md);
+    color: var(--color-text);
+  }
+
+  .policy-section p {
+    margin-bottom: var(--spacing-md);
+    line-height: 1.6;
+  }
+
+  .policy-section ul {
+    margin-left: var(--spacing-lg);
+    margin-bottom: var(--spacing-md);
+  }
+
+  .policy-section li {
+    margin-bottom: var(--spacing-xs);
+    line-height: 1.5;
+  }
+</style>

@@ -79,4 +79,4 @@ console.log(`📊 ${realJobs.length} jobs from real WeWorkRemotely listings`);
 console.log('🔗 All URLs point to actual WeWorkRemotely job postings');
 console.log('✅ Ready for production use!');
 
-module.exports = { realJobs };
+export { realJobs };

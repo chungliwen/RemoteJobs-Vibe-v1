@@ -1,0 +1,275 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { getDb } from '../../../lib/db';
+import { getCategoryLabel, getCoverageLabel } from '../../../lib/utils';
+
+// Check if user is admin
+if (!Astro.locals.user || Astro.locals.user.role !== 'admin') {
+  return Astro.redirect('/');
+}
+
+const db = getDb(Astro.locals);
+
+// Get approved jobs with pagination
+const page = parseInt(Astro.url.searchParams.get('page') || '1');
+const limit = 20;
+const offset = (page - 1) * limit;
+
+const approvedJobs = await db.prepare(`
+  SELECT 
+    job_listings.*,
+    companies.name as company_name
+  FROM job_listings
+  LEFT JOIN companies ON job_listings.company_id = companies.id
+  WHERE job_listings.status = 'approved'
+  ORDER BY job_listings.created_at DESC
+  LIMIT ? OFFSET ?
+`).bind(limit, offset).all();
+
+// Get total count for pagination
+const totalCount = await db.prepare(`
+  SELECT COUNT(*) as count FROM job_listings WHERE status = 'approved'
+`).first();
+
+const totalPages = Math.ceil(Number(totalCount?.count || 0) / limit);
+---
+
+<BaseLayout title="Approved Jobs | Admin | RemoteJobs.com.my">
+  <div class="container">
+    <div class="admin-page">
+      <div class="page-header">
+        <h1>Approved Jobs ({totalCount?.count || 0})</h1>
+        <div class="header-actions">
+          <a href="/admin" class="btn btn-secondary">← Dashboard</a>
+          <a href="/admin/jobs/pending" class="btn btn-primary">Review Pending</a>
+        </div>
+      </div>
+
+      {approvedJobs.results.length === 0 ? (
+        <div class="card">
+          <p class="text-muted">No approved jobs found.</p>
+        </div>
+      ) : (
+        <div class="jobs-table">
+          <table>
+            <thead>
+              <tr>
+                <th>Job Title</th>
+                <th>Company</th>
+                <th>Category</th>
+                <th>Coverage</th>
+                <th>Posted</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {approvedJobs.results.map((job: any) => (
+                <tr>
+                  <td>
+                    <a href={`/jobs/${job.id}`} target="_blank" class="job-link">
+                      {job.job_title}
+                    </a>
+                  </td>
+                  <td>{job.company_name || 'Unknown'}</td>
+                  <td>
+                    <span class="badge badge-primary">{getCategoryLabel(job.category)}</span>
+                  </td>
+                  <td>
+                    <span class="badge badge-secondary">{getCoverageLabel(job.coverage)}</span>
+                  </td>
+                  <td>{new Date(job.listing_date || job.created_at).toLocaleDateString()}</td>
+                  <td>
+                    <div class="action-buttons">
+                      <a href={`/admin/jobs/${job.id}/edit`} class="btn btn-sm btn-secondary">
+                        Edit
+                      </a>
+                      <button 
+                        class="btn btn-sm btn-danger"
+                        data-job-id={job.id}
+                        onclick="archiveJob(this.dataset.jobId)"
+                      >
+                        Archive
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+
+      <!-- Pagination -->
+      {totalPages > 1 && (
+        <div class="pagination">
+          {page > 1 && (
+            <a href={`?page=${page - 1}`} class="pagination-link">← Previous</a>
+          )}
+          
+          <span class="pagination-info">
+            Page {page} of {totalPages}
+          </span>
+          
+          {page < totalPages && (
+            <a href={`?page=${page + 1}`} class="pagination-link">Next →</a>
+          )}
+        </div>
+      )}
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .admin-page {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-xl);
+    flex-wrap: wrap;
+    gap: var(--spacing-md);
+  }
+
+  .header-actions {
+    display: flex;
+    gap: var(--spacing-sm);
+    flex-wrap: wrap;
+  }
+
+  .jobs-table {
+    background-color: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    margin-bottom: var(--spacing-xl);
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  th {
+    background-color: var(--color-bg-alt);
+    padding: var(--spacing-md);
+    text-align: left;
+    font-weight: 600;
+    color: var(--color-text);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  td {
+    padding: var(--spacing-md);
+    border-bottom: 1px solid var(--color-border);
+    vertical-align: middle;
+  }
+
+  tr:last-child td {
+    border-bottom: none;
+  }
+
+  .job-link {
+    color: var(--color-text);
+    font-weight: 500;
+  }
+
+  .job-link:hover {
+    color: var(--color-primary);
+    text-decoration: none;
+  }
+
+  .action-buttons {
+    display: flex;
+    gap: var(--spacing-xs);
+    flex-wrap: wrap;
+  }
+
+  .btn-sm {
+    padding: var(--spacing-xs) var(--spacing-sm);
+    font-size: 0.75rem;
+  }
+
+  .pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: var(--spacing-lg);
+    margin-top: var(--spacing-xl);
+  }
+
+  .pagination-link {
+    color: var(--color-primary);
+    text-decoration: none;
+    font-weight: 500;
+  }
+
+  .pagination-link:hover {
+    text-decoration: underline;
+  }
+
+  .pagination-info {
+    color: var(--color-text-muted);
+    font-size: 0.875rem;
+  }
+
+  @media (max-width: 768px) {
+    .page-header {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .header-actions {
+      justify-content: center;
+    }
+
+    .jobs-table {
+      overflow-x: auto;
+    }
+
+    table {
+      min-width: 700px;
+    }
+
+    .action-buttons {
+      flex-direction: column;
+    }
+
+    .pagination {
+      flex-direction: column;
+      gap: var(--spacing-md);
+    }
+  }
+</style>
+
+<script>
+  async function archiveJob(jobId: string) {
+    if (!confirm('Are you sure you want to archive this job? This will hide it from public view.')) return;
+    
+    try {
+      const response = await fetch('/api/admin/jobs/archive', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ job_id: parseInt(jobId) }),
+      });
+      
+      if (response.ok) {
+        location.reload();
+      } else {
+        const data = await response.json();
+        alert('Error: ' + (data.error || 'Something went wrong'));
+      }
+    } catch (error) {
+      alert('Network error. Please try again.');
+    }
+  }
+
+  // Make function globally available
+  (window as any).archiveJob = archiveJob;
+</script>
